@@ -672,7 +672,7 @@ func (e *Exporter) collect(ch chan<- prometheus.Metric) {
 						}
 
 						ch <- prometheus.MustNewConstMetric(
-							consumergroupLag, prometheus.GaugeValue, float64(lag), group.GroupId, topic, strconv.FormatInt(int64(partition), 10),
+							consumergroupLag, prometheus.GaugeValue, float64(lag), group.GroupId, topic, strconv.FormatInt(int64(partition), 10), group.GroupId+"__"+topic,
 						)
 					}
 					e.mu.Unlock()
@@ -918,7 +918,7 @@ func setup(
 	consumergroupLag = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "consumergroup", "lag"),
 		"Current Approximate Lag of a ConsumerGroup at Topic/Partition",
-		[]string{"consumergroup", "topic", "partition"}, labels,
+		[]string{"consumergroup", "topic", "partition", "group-with-topic"}, labels,
 	)
 
 	consumergroupLagZookeeper = prometheus.NewDesc(

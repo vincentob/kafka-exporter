@@ -1,5 +1,4 @@
 FROM        quay.io/prometheus/busybox:latest
-MAINTAINER  Daniel Qian <qsj.daniel@gmail.com>
 
 ARG TARGETARCH
 ARG BIN_DIR=.build/linux-${TARGETARCH}/
