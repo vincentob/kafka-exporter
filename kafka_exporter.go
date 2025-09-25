@@ -681,7 +681,7 @@ func (e *Exporter) collect(ch chan<- prometheus.Metric) {
 					consumergroupCurrentOffsetSum, prometheus.GaugeValue, float64(currentOffsetSum), group.GroupId, topic,
 				)
 				ch <- prometheus.MustNewConstMetric(
-					consumergroupLagSum, prometheus.GaugeValue, float64(lagSum), group.GroupId, topic,
+					consumergroupLagSum, prometheus.GaugeValue, float64(lagSum), group.GroupId, topic, group.GroupId+"__"+topic,
 				)
 			}
 		}
@@ -698,7 +698,7 @@ func (e *Exporter) collect(ch chan<- prometheus.Metric) {
 				servers = append(servers, broker.Addr())
 			}
 		}
-		klog.Info(servers)
+		klog.V(DEBUG).Info(servers)
 		for _, broker := range e.client.Brokers() {
 			for _, server := range servers {
 				if server == broker.Addr() {
@@ -918,7 +918,7 @@ func setup(
 	consumergroupLag = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "consumergroup", "lag"),
 		"Current Approximate Lag of a ConsumerGroup at Topic/Partition",
-		[]string{"consumergroup", "topic", "partition", "group-with-topic"}, labels,
+		[]string{"consumergroup", "topic", "partition", "group_with_topic"}, labels,
 	)
 
 	consumergroupLagZookeeper = prometheus.NewDesc(
@@ -930,7 +930,7 @@ func setup(
 	consumergroupLagSum = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "consumergroup", "lag_sum"),
 		"Current Approximate Lag of a ConsumerGroup at Topic for all partitions",
-		[]string{"consumergroup", "topic"}, labels,
+		[]string{"consumergroup", "topic", "group_with_topic"}, labels,
 	)
 
 	consumergroupMembers = prometheus.NewDesc(
